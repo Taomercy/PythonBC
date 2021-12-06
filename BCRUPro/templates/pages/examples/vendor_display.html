@@ -30,7 +30,7 @@
                                     <tr>
                                         <td>
                                             <div class="form-group col-md-6">
-                                                <img src="{% static vendor.logo %}" alt="Product Image" style="width:200%;height:auto;">
+                                                <img src="{% static vendor.static_logo %}" alt="Product Image" style="width:200%;height:auto;">
                                             </div>
                                             <div class="form-group col-md-6">{{ vendor.name }}</div>
                                         </td>
@@ -40,6 +40,12 @@
                                                 <input type="hidden" name="vendor_name" value="{{ vendor.name }}">
                                                 <input type="submit" value="Buy" class="btn btn-sm btn-info">
                                             </form>
+                                            {% if owner_name == "admin" %}
+                                                <form method="post" action="{% url 'remove_vendor' %}">
+                                                    <input type="hidden" name="vendor_name" value="{{ vendor.name }}">
+                                                    <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                                                </form>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                   {% endfor %}

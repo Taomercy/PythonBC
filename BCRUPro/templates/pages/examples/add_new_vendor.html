@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+    <!-- Main content -->
+{% block content %}
+    <form action="{% url 'add_new_vendor' %}" method="post" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">General</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-group">Vendor Name</label>
+                <div class="form-group">
+                    <input name="vendor_name" id="vendor_name" type="text" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-group">Logo</label>
+                  <div class="form-group">
+                      <input name="logo" id="logo" type="file">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="form-group">Product</label>
+                  <div class="form-group">
+                      <select name="product" id="product" type="text" class="custom-select">
+                          {% for product in products %}
+                            <option>{{ product }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+              </div>
+            <div>
+                <label class="form-group">Overview</label>
+                <div class="form-group">
+                    <textarea rows="5" name="overview" id="overview" type="text" class="form-control"></textarea>
+                </div>
+            </div>
+              <div class="form-group">
+                <div class="col-md-12">
+                  <a href="{% url 'index' %}" class="btn btn-secondary">Cancel</a>
+                  <input type="submit" value="Submit" class="btn btn-success float-right">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+{% endblock %}
+
+{% block script %}
+{#<script language="JavaScript">#}
+{#    function add_new_verdor() {#}
+{#        var vendor_name = $("#vendor_name").val()#}
+{#        var logo = $("#logo").val()#}
+{#        var product = $("#product option:checked").text()#}
+{#        var overview = $("#overview").val()#}
+{#        $.post("/add_new_vendor",{"vendor_name": vendor_name, "logo": logo, "product": product, "overview": overview}, function (data){#}
+{#            var result = JSON.parse(data)#}
+{#            alert(result.result)#}
+{#        })#}
+{#    }#}
+{#</script>#}
+{% endblock %}
+

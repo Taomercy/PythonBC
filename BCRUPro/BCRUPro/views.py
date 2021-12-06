@@ -1,5 +1,7 @@
 import datetime
 import functools
+import json
+import os.path
 import time
 # Create your views here.
 from functools import wraps
@@ -11,6 +13,7 @@ from django.http import Http404, HttpResponse
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from BCRUPro.models import *
+from BCRUPro.settings import vendor_path
 from BCRUPro.utils import send_block
 from login.models import User
 
@@ -351,6 +354,50 @@ def vendor_display(request):
         vendors = Vendor.objects.filter(category__name=product_name)
         theader = Vendor.get_threader()
         return render(request, 'pages/examples/vendor_display.html', locals())
+
+
+@require_http_methods(['GET', "POST"])
+def add_new_vendor(request):
+    try:
+        owner_name = request.session['user_name']
+    except KeyError:
+        return render(request, 'pages/examples/login.html')
+    if request.method == 'GET':
+        owner = User.objects.get(name=owner_name)
+        products = Product.objects.all()
+        return render(request, 'pages/examples/add_new_vendor.html', locals())
+    else:
+        vendor_name = request.POST.get('vendor_name', None)
+        logo = request.FILES.get('logo', None)
+        product = request.POST.get('product', None)
+        overview = request.POST.get('overview', None)
+        logo_file = vendor_name + ".png"
+        filename = os.path.join(vendor_path, logo_file)
+        with open(filename, "wb+") as fw:
+            for c in logo.chunks():
+                fw.write(c)
+
+        if Vendor.objects.filter(name=vendor_name):
+            message = "Vendor had been existed."
+            response = {"result": message}
+        else:
+            vendor = Vendor.objects.create(name=vendor_name, logo=logo_file,
+                                           category=Product.objects.get(name=product),
+                                           overview=overview)
+            response = {"result": "success"}
+        return HttpResponse(json.dumps(response))
+
+
+def remove_vendor(request):
+    vendor_name = request.POST.get('vendor_name', None)
+    try:
+        vendor = Vendor.objects.get(name=vendor_name)
+        os.remove(vendor.logo_path)
+        vendor.delete()
+        response = {"result": "success"}
+    except Exception as e:
+        response = {"result": "failed", "reason": e}
+    return HttpResponse(json.dumps(response))
 
 
 @require_http_methods(['POST'])

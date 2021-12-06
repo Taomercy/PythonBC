@@ -132,20 +132,6 @@ USE_TZ = False
 
 SESSION_COOKIE_AGE = 60*60*24
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = [
-    # os.path.join(STATIC_ROOT, 'AdminLTE_3_0_5'),
-    ("adminlte", os.path.join(STATIC_ROOT, 'AdminLTE_3_0_5')),
-    ("img", os.path.join(STATIC_ROOT, 'datatables', 'images')),
-    ("js", os.path.join(STATIC_ROOT, 'js')),
-    ("fonts", os.path.join(STATIC_ROOT, 'datatables', 'fonts')),
-]
-
 sysstr = platform.system()
 home_path = ""
 if sysstr == 'Linux':
@@ -160,6 +146,29 @@ logger.setLevel(logging.DEBUG)
 console_path = os.path.join(home_path, 'ConsoleLog')
 if not os.path.exists(console_path):
     os.makedirs(console_path)
+storage_path = os.path.join(home_path, 'storage')
+if not os.path.exists(storage_path):
+    os.makedirs(storage_path)
+vendor_path = os.path.join(storage_path, 'vendor')
+if not os.path.exists(vendor_path):
+    os.makedirs(vendor_path)
+product_path = os.path.join(storage_path, 'product')
+if not os.path.exists(product_path):
+    os.makedirs(product_path)
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [
+    # os.path.join(STATIC_ROOT, 'AdminLTE_3_0_5'),
+    ("adminlte", os.path.join(STATIC_ROOT, 'AdminLTE_3_0_5')),
+    ("img", os.path.join(STATIC_ROOT, 'datatables', 'images')),
+    ("js", os.path.join(STATIC_ROOT, 'js')),
+    ("fonts", os.path.join(STATIC_ROOT, 'datatables', 'fonts')),
+    ("storage", storage_path),
+]
 
 LOGGING = {
     'version': 1,

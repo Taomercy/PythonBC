@@ -1,8 +1,11 @@
+import os.path
+
 from django.db import models
 
 # Create your models here.
 from django.db.models import PROTECT
 
+from BCRUPro.settings import vendor_path
 from login.models import User
 
 
@@ -90,8 +93,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def get_static_image(self):
-        return "adminlte/dist/img/"+str(self.image_name)
+    @property
+    def static_image(self):
+        return str(self.image_name)
 
     @staticmethod
     def get_image_basename(name):
@@ -108,8 +112,13 @@ class Vendor(models.Model):
     def __str__(self):
         return self.name
 
-    def get_static_logo(self):
-        return "adminlte/dist/img/"+str(self.logo)
+    @property
+    def static_logo(self):
+        return "storage/vendor/"+str(self.logo)
+
+    @property
+    def logo_path(self):
+        return os.path.join(vendor_path, str(self.logo))
 
     @staticmethod
     def get_threader():
