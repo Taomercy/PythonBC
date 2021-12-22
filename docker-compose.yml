@@ -23,6 +23,7 @@ services:
     - "8000:8000"
     volumes:
     - /home/BCRUPro
+    - /home/ec2-user/storage:/root/storage
     container_name: "ttm_web"
     command: python3 /home/BCRUPro/manage.py runserver 0.0.0.0:8000
     
