@@ -30,6 +30,31 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+sysstr = platform.system()
+home_path = ""
+if sysstr == 'Linux':
+    home_path = os.environ['HOME']
+elif sysstr == 'Windows':
+    home_path = os.environ['TEMP']
+else:
+    print("sysstr:", sysstr)
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
+console_path = os.path.join(home_path, 'ConsoleLog')
+if not os.path.exists(console_path):
+    os.makedirs(console_path)
+storage_path = os.path.join(home_path, 'storage')
+if not os.path.exists(storage_path):
+    os.makedirs(storage_path)
+vendor_path = os.path.join(storage_path, 'vendor')
+if not os.path.exists(vendor_path):
+    os.makedirs(vendor_path)
+product_path = os.path.join(storage_path, 'product')
+if not os.path.exists(product_path):
+    os.makedirs(product_path)
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -83,10 +108,15 @@ WSGI_APPLICATION = 'BCRUPro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+if sysstr == 'Linux':
+    db_name = os.path.join(storage_path, 'db.sqlite3')
+else:
+    db_name = os.path.join(BASE_DIR, 'db.sqlite3')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': db_name,
     }
 }
 
@@ -131,30 +161,6 @@ USE_L10N = True
 USE_TZ = False
 
 SESSION_COOKIE_AGE = 60*60*24
-
-sysstr = platform.system()
-home_path = ""
-if sysstr == 'Linux':
-    home_path = os.environ['HOME']
-elif sysstr == 'Windows':
-    home_path = os.environ['TEMP']
-else:
-    print("sysstr:", sysstr)
-logger = logging.getLogger('django_auth_ldap')
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
-console_path = os.path.join(home_path, 'ConsoleLog')
-if not os.path.exists(console_path):
-    os.makedirs(console_path)
-storage_path = os.path.join(home_path, 'storage')
-if not os.path.exists(storage_path):
-    os.makedirs(storage_path)
-vendor_path = os.path.join(storage_path, 'vendor')
-if not os.path.exists(vendor_path):
-    os.makedirs(vendor_path)
-product_path = os.path.join(storage_path, 'product')
-if not os.path.exists(product_path):
-    os.makedirs(product_path)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
